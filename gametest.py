@@ -1,6 +1,12 @@
 #!/usr/bin/python
+#
 # grab list of owned games from a user on BGG
-# 2.7
+# initiator chooses games
+# voters vote
+# app returns list of games ordered by score
+#
+# TODO:
+# - functionize chunks > limit variable scope > reclaim variables
 
 import urllib
 from operator import itemgetter, attrgetter
@@ -10,7 +16,7 @@ import re
 from xml.dom.minidom import parseString
 
 user = raw_input('Enter username: ')
-url =  'http://boardgamegeek.com/xmlapi2/collection?username=' + user + '&own=1'
+url = 'http://boardgamegeek.com/xmlapi2/collection?username=' + user + '&own=1'
 
 #download the file:
 file = urllib.urlopen(url)
@@ -23,47 +29,58 @@ dom = parseString(data)
 #get list of game names
 xmlList = dom.getElementsByTagName('name')
 
-#step through games
+#build game array
 i = 1
 numlist = []
 for node in xmlList:
     name = node.firstChild.data
-    #print(name)
     numlist.append([i,str(name),0])
     print(str(i) + " " + numlist[i-1][1])
-    #print(numlist)
     i += 1
 
-z = int(raw_input('Enter the number of voters: '))
+#have initiator create a culled list to present to voters
+numCull = int(raw_input('Enter the number of games from which to choose: '))
+
+voteList = []
+i = 1
+
+while i <= numCull:
+	j = int(raw_input('Enter choice ' + str(i) + ': '))
+	for k in numlist:
+		if k[0] == j:
+			voteList.append([i, k[1], 0])
+	i += 1
+	
+
+# voting
+numVoters = int(raw_input('Enter the number of voters: '))
+
+# each voter votes
 y = 1
-while y <= z:
-    for item in numlist:
+while y <= numVoters:
+    for item in voteList:
         print(str(item[0]) + ' ' + str(item[1]))
     print
     print('Voter ' + str(y))
-    print('Enter the numbers of your top five choices, starting at your top choice.')
+    print('Starting at your top choice, enter the game numbers in order of preference.')
 
     # choose top 5
-    for j in range(1,6):
+    for j in range(1,numCull+1):
         k = raw_input("Enter choice " + str(j) + ": ")
-        for l in numlist:
+        for l in voteList:
             if l[0] == int(k):
-                l[2] += int(j)
+                l[2] += 6 - int(j)
             #print l
 
     print
     y += 1
-    
-#show list with scores
-#for item in numlist:
-#    print(str(item[0]) + ' ' + str(item[1]) + ' ' + str(item[2]))
 
 print
 
 #show final sorted list
-top = sorted(numlist, key=itemgetter(2))
+top = sorted(voteList, key=itemgetter(2), reverse=True)
 for item in top:
     if item[2] != 0:
-        print(str(item[1]) + ' ' + str(item[2]))
+        print(str(item[2]) + ' ' + str(item[1]))
 
 print

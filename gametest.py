@@ -34,30 +34,30 @@ def bggarray(user):
     i = 1
     numlist = []
     for node in xmlList:
-    	name = node.firstChild.data
-    	numlist.append([i,str(name),0])
-    	i += 1
-	
-	return numlist
+        name = node.firstChild.data
+        numlist.append([i,str(name),0])
+        i += 1
+
+    return numlist
 
 def cullList(numCull,numlist):
-	#print(numlist)
-	for item in numlist:
-		print(str(item[0]) + " " + item[1])
-	
-	voteList = []
-	i = 1
-
-	while i <= numCull:
+    for item in numlist:
+        print(str(item[0]) + " " + item[1])
+    
+    voteList = []
+    i = 1
+    print('Choose the games for the vote list.')
+    
+    while i <= numCull:
 		j = int(raw_input('Enter choice ' + str(i) + ': '))
 		for k in numlist:
 			if k[0] == j:
 				voteList.append([i, k[1], 0])
 		i += 1
-	return voteList
+    return voteList
 
 def userVoting(numVoters,voteList,numCull):
-	y = 1
+    y = 1
 	while y <= numVoters:
 		for item in voteList:
 			print(str(item[0]) + ' ' + str(item[1]))

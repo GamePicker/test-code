@@ -33,10 +33,10 @@ def bggarray(user):
     #build game array
     i = 1
     numlist = []
-    for node in xmlList:
-    	name = node.firstChild.data
-    	numlist.append([i,str(name),0])
-    	i += 1
+	for node in xmlList:
+		name = node.firstChild.data
+		numlist.append([i,str(name),0])
+		i += 1
 	
 	return numlist
 

@@ -69,7 +69,7 @@ while y <= numVoters:
         k = raw_input("Enter choice " + str(j) + ": ")
         for l in voteList:
             if l[0] == int(k):
-                l[2] += 6 - int(j)
+                l[2] += numCull + 1 - int(j)
             #print l
 
     print

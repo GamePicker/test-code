@@ -11,11 +11,9 @@
 # - functionize chunks > limit variable scope > reclaim variables
 
 import urllib
-from operator import itemgetter, attrgetter
 import re
- 
-#import easy to use xml parser called minidom:
 from xml.dom.minidom import parseString
+from operator import itemgetter, attrgetter
 
 user = raw_input('Enter username: ')
 url = 'http://boardgamegeek.com/xmlapi2/collection?username=' + user + '&own=1'
@@ -37,11 +35,11 @@ numlist = []
 for node in xmlList:
     name = node.firstChild.data
     numlist.append([i,str(name),0])
-    print(str(i) + " " + numlist[i-1][1])
+#    print(str(i) + " " + numlist[i-1][1])
     i += 1
 
 #have initiator create a culled list to present to voters
-numCull = int(raw_input('Enter the number of games from which to choose: '))
+numCull = int(raw_input('Enter the quantity of games for the voting pool: '))
 
 voteList = []
 i = 1

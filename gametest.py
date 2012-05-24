@@ -1,7 +1,9 @@
 #!/usr/bin/python
 #
 # grab list of owned games from a user on BGG
-# initiator chooses games
+# initiator sets number of games to be in vote list
+# initiator chooses games to appear in vote list
+# intiator chooses number of voters
 # voters vote
 # app returns list of games ordered by score
 #

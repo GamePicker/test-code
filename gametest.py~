@@ -15,7 +15,6 @@ import re
 from xml.dom.minidom import parseString
 from operator import itemgetter, attrgetter
 
-
 def bggarray(user):
     url = 'http://boardgamegeek.com/xmlapi2/collection?username=' + user + '&own=1'
 
@@ -40,29 +39,30 @@ def bggarray(user):
 
     return numlist
 
-def cullList(numCull,numlist):
-    for item in numlist:
+def showlist(list):
+     #display list of games
+    for item in list:
         print(str(item[0]) + " " + item[1])
-    
+
+def cullList(numCull,numlist):
+    #build culled list of games from initiator
     voteList = []
     i = 1
-    print('Choose the games for the vote list.')
-    
     while i <= numCull:
-		j = int(raw_input('Enter choice ' + str(i) + ': '))
-		for k in numlist:
-			if k[0] == j:
-				voteList.append([i, k[1], 0])
-		i += 1
+        j = int(raw_input('Enter choice ' + str(i) + ': '))
+        for k in numlist:
+            if k[0] == j:
+                voteList.append([i, k[1], 0])
+        i += 1
     return voteList
 
 def userVoting(numVoters,voteList,numCull):
-    y = 1
-    while y <= numVoters:
+    i = 1
+    while i <= numVoters:
         for item in voteList:
             print(str(item[0]) + ' ' + str(item[1]))
         print
-        print('Voter ' + str(y))
+        print('Voter ' + str(i))
         print('Starting at your top choice, enter the game numbers in order of preference.')
         for j in range(1,numCull+1):
             k = raw_input("Enter choice " + str(j) + ": ")
@@ -70,7 +70,7 @@ def userVoting(numVoters,voteList,numCull):
                 if l[0] == int(k):
                     l[2] += numCull + 1 - int(j)
         print
-        y += 1
+        i += 1
     return voteList
 
 def results(voteList):
@@ -81,17 +81,34 @@ def results(voteList):
 
 
 def main():
-	user = raw_input('Enter username: ')
-	numlist = bggarray(user)
-	#print(numlist)
+    #bgg username    
+    print
+    user = raw_input('Enter username: ')
+    numlist = bggarray(user)
+    
+    #display bgg user's owned games
+    print
+    showlist(numlist)
+
+    #number of games to build new list
+    print
+    numCull = int(raw_input('Enter the quantity of games for the voting pool: '))
+
+    #build the new culled list
+    print
+    print('Choose the games for the vote list.')
+    voteList = cullList(numCull, numlist)
+    
+    #get number of voters    
+    print
+    numVoters = int(raw_input('Enter the number of voters: '))
+
+    #user voting
+    finallist = userVoting(numVoters,voteList,numCull)
+
+    #sort and display results of user voting
+    results(finallist)
 	
-	numCull = int(raw_input('Enter the quantity of games for the voting pool: '))
-	voteList = cullList(numCull, numlist)
-	
-    print(voteList)
-	numVoters = int(raw_input('Enter the number of voters: '))
-	finallist = userVoting(numVoters,voteList,numCull)
-	results(finallist)
-	
-main()	
+if __name__ == "__main__":
+    main()	
 	
